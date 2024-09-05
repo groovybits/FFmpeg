@@ -712,7 +712,7 @@ static int decode_nal_units(H264Context *h, const uint8_t *buf, int buf_size)
         }
 
         if (err < 0) {
-            av_log(h->avctx, AV_LOG_ERROR, "decode_slice_header error\n");
+            av_log(h->avctx, AV_LOG_WARNING, "decode_slice_header error\n");
         }
     }
 

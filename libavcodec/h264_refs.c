@@ -374,7 +374,7 @@ int ff_h264_build_ref_list(H264Context *h, H264SliceContext *sl)
             }
 
             if (i < 0 || mismatches_ref(h, ref)) {
-                av_log(h->avctx, AV_LOG_ERROR,
+                av_log(h->avctx, AV_LOG_WARNING,
                        i < 0 ? "reference picture missing during reorder\n" :
                                "mismatching reference\n"
                       );
@@ -401,7 +401,7 @@ int ff_h264_build_ref_list(H264Context *h, H264SliceContext *sl)
             if (   !sl->ref_list[list][index].parent
                 || (!FIELD_PICTURE(h) && (sl->ref_list[list][index].reference&3) != 3)) {
                 int i;
-                av_log(h->avctx, AV_LOG_ERROR, "Missing reference picture, default is %d\n", h->default_ref[list].poc);
+                av_log(h->avctx, AV_LOG_WARNING, "Missing reference picture, default is %d\n", h->default_ref[list].poc);
                 for (i = 0; i < FF_ARRAY_ELEMS(h->last_pocs); i++)
                     h->last_pocs[i] = INT_MIN;
                 if (h->default_ref[list].parent
@@ -643,7 +643,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h)
                 if (mmco[i].opcode != MMCO_SHORT2LONG ||
                     !h->long_ref[mmco[i].long_arg]    ||
                     h->long_ref[mmco[i].long_arg]->frame_num != frame_num) {
-                    av_log(h->avctx, h->short_ref_count ? AV_LOG_ERROR : AV_LOG_DEBUG, "mmco: unref short failure\n");
+                    av_log(h->avctx, h->short_ref_count ? AV_LOG_WARNING : AV_LOG_DEBUG, "mmco: unref short failure\n");
                     err = AVERROR_INVALIDDATA;
                 }
                 continue;
@@ -775,7 +775,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h)
          * stream. Need to discard one frame. Prevents overrun of the
          * short_ref and long_ref buffers.
          */
-        av_log(h->avctx, AV_LOG_ERROR,
+        av_log(h->avctx, AV_LOG_WARNING,
                "number of reference frames (%d+%d) exceeds max (%d; probably "
                "corrupt input), discarding one\n",
                h->long_ref_count, h->short_ref_count, h->ps.sps->ref_frame_count);
